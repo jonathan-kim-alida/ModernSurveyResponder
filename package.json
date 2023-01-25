@@ -1,0 +1,20 @@
+{
+  "name": "surveyresponder",
+  "version": "1.0.0",
+  "description": "This is an Web Api responsible for ...",
+  "main": "SurveyResponder.js",
+  "files": [
+    "*.js"
+  ],
+  "scripts": {
+    "start": "node SurveyResponder.js runApp"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "dependencies": {
+    "axios": "^1.2.4",
+    "make-runnable": "^1.4.1"
+  }
+}
