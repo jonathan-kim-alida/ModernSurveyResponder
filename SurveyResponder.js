@@ -1,15 +1,17 @@
-const SurveyFetcher = require('./SurveyFetcher.js');
+const SurveyApi = require('./SurveyApi.js');
 const QuestionProcessor = require('./QuestionProcessor.js')
 
 
 async function main(){
 
-    const surveyId = 'd519b770-996c-44f4-91b1-16badce8a90d'
+    const surveyId = 'cc2371ed-825a-48c2-9419-8112736866a7'
     
     console.log("Starting Survey Responder")
     console.log("For Usage please use Readme.md")
-    const response = await SurveyFetcher.postStart(surveyId);
-    QuestionProcessor.getPageQuestions(response);
+    const response = await SurveyApi.postStart(surveyId);
+    const dataPoints = QuestionProcessor.getPageQuestions(response);
+
+    await SurveyApi.postNavigation(response, response.jwt, dataPoints)
 
 
 }
