@@ -1,0 +1,7 @@
+{
+  "applicationId": "5595ba9f-b81d-416e-bec0-ad420039b362",
+  "memberId": "9b6fa9ac-4176-48a5-bce7-adc90104fcda",
+  "stubUrl": "https://login.sit1.vcilabs.com",
+  "respondingUrl": "https://respondingservice.sit1.vcilabs.com",
+  "basicAuth": "MTExMTExMTEtMDAwMC0wMDAwLTAwMDEtMDAwMDAwMDAwMGExXGNwbWFkbWluQHZpc2lvbmNyaXRpY2FsLmNvbTpQYXNzd29yZDE="
+}
