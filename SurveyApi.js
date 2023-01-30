@@ -1,7 +1,6 @@
 
 const config = require('./config.dev.json');
 const axios = require('axios');
-const applicationId = config.applicationId;
 const respondingUrl = config.respondingUrl;
 
 
@@ -20,10 +19,10 @@ async function getToken() {
     }
 }
 
-async function postRespondingContext(surveyId) {
+async function postRespondingContext(surveyId, applicationId) {
     const contextUrl = `${respondingUrl}/api/v1/applications/${applicationId}/surveys/${surveyId}/respondingcontext`;
     const token = await getToken();
-    const contextData = returnContextData('en-CA', 'www.client.com', 2);
+    const contextData = returnContextData('en-CA', 'www.client.com', 0);
 
     const request = {
         method: 'post',
@@ -40,9 +39,9 @@ async function postRespondingContext(surveyId) {
     }
 };
 
-async function postStart(surveyId) {
+async function postStart(surveyId, applicationId) {
     const startUrl = `${respondingUrl}/api/v1/start`;
-    const contextId = await postRespondingContext(surveyId)
+    const contextId = await postRespondingContext(surveyId, applicationId)
     const startData = returnStartData(contextId, 'www.client.com', 'Desktop');
 
     const request = {
@@ -52,7 +51,6 @@ async function postStart(surveyId) {
     };
     try {
         const response = await axios(request);
-        console.log(response.data)
         return response.data;
     } catch (error) {
         console.error(error);
@@ -63,6 +61,7 @@ async function postStart(surveyId) {
 async function postNavigation(responseBody, jwt, dp) {
     const { surveyId } = responseBody;
     const { responseId } = responseBody;
+    const { applicationId } = responseBody;
     const navigateUrl = `${respondingUrl}/api/v1/applications/${applicationId}/surveys/${surveyId}/responses/${responseId}`;
 
     const request = {
@@ -80,7 +79,7 @@ async function postNavigation(responseBody, jwt, dp) {
     } catch (error) {
         console.error(error);
     }
-  }
+}
 
 function returnContextData(locale, domainName, dataSetType) {
     const jsonData = {
