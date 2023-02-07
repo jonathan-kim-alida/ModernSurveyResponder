@@ -5,14 +5,13 @@ async function main() {
     const args = process.argv.slice(2);
     const responseNumber = args[args.length - 1];
     const surveyId = args[args.length - 2];
-    const applicationId = args[args.length - 3];
 
     const start = new Date;
     console.log("For Usage please use Readme.md");
     console.log(`Starting Survey Responder for survey: ${surveyId} with ${responseNumber} responses at ${start.toTimeString()} PST`);
 
     for (let i = 0; i < responseNumber; i++) {
-        let response = await SurveyApi.postStart(surveyId, applicationId);
+        let response = await SurveyApi.postStart(surveyId);
         const dataPoints = QuestionProcessor.getPageQuestions(response);
         response = await SurveyApi.postNavigation(response, response.jwt, dataPoints);
         let terminateResponse = 0;

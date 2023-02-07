@@ -1,7 +1,9 @@
 {
-  "applicationId": "5595ba9f-b81d-416e-bec0-ad420039b362",
-  "memberId": "9b6fa9ac-4176-48a5-bce7-adc90104fcda",
-  "stubUrl": "https://login.sit1.vcilabs.com",
-  "respondingUrl": "https://respondingservice.sit1.vcilabs.com",
-  "basicAuth": "MTExMTExMTEtMDAwMC0wMDAwLTAwMDEtMDAwMDAwMDAwMGExXGNwbWFkbWluQHZpc2lvbmNyaXRpY2FsLmNvbTpQYXNzd29yZDE="
+  "applicationId": "9a38af50-cb2b-4198-8372-ab65014236a1",
+  "communicationId": "d955a7f1-6e86-4adb-adf1-afa1012e3eb1",
+  "activityId": "7de24a2b-eca8-4f7a-bb96-afa1012d6124",
+  "memberId": "",
+  "locale": "en-US",
+  "dataSetType": 0,
+  "respondingUrl": "https://respondingservice.sit1.vcilabs.com"
 }

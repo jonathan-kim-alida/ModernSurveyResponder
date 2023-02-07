@@ -33,10 +33,24 @@ function processDataPoint(element) {
             return processSingleChoice(element);
         case 'MultipleChoicePlugin':
             return processSingleChoice(element);
+        case 'RatingPlugin':
+            return processRating(element);
         case 'NpsPlugin':
             return processNPS(element);
         case 'RankOrderPlugin':
             return processRankOrder(element);
+        case 'SingleChoiceCarouselPlugin':
+            return processGrid(element);
+        case 'SingleChoiceCarouselSliderPlugin':
+            return processGrid(element);
+        case 'ScaleSliderGridPlugin':
+            return processGrid(element);
+        case 'SingleChoiceGridPlugin':
+            return processGrid(element);
+        case 'MultipleChoiceCarouselPlugin':
+            return processGrid(element);
+        case 'MultipleChoiceGridPlugin':
+            return processGrid(element);
         case 'HighlighterPlugin':
             return processHighlighter(element);
         case 'OpenEndNoValidationPlugin':
@@ -63,41 +77,7 @@ function processDataPoint(element) {
 function processSingleChoice(element) {
     const path = `steps/${element.id}`
     const choices = element.elements;
-    const valueArray = []
-    const randomSelection = getRandomArbitrary(0, choices.length)
-    if(choices.length === 1){
-        currentAnswer = {
-            id: choices[0].id,
-            value: {
-                selected: true
-            }
-        }   
-        const datapoint = {
-            path: path,
-            value: [currentAnswer]
-        }
-        return datapoint;
-    }
-
-    for (let i = 0; i < choices.length; i++) {
-        let currentAnswer;
-        if (randomSelection === i) {
-            currentAnswer = {
-                id: choices[i].id,
-                value: {
-                    selected: true
-                }
-            }
-        } else {
-            currentAnswer = {
-                id: choices[i].id,
-                value: {
-                    selected: false
-                }
-            }
-        }
-        valueArray.push(currentAnswer)
-    }
+    const valueArray = createRandomSingleSelection(choices);
     const datapoint = {
         path: path,
         value: valueArray
@@ -105,26 +85,35 @@ function processSingleChoice(element) {
     return datapoint;
 }
 
+function processRating(element) {
+    const path = `steps/${element.id}`
+    const datapoint = {
+        path: path,
+        value: getRandomArbitrary(1, 5)
+    }
+    return datapoint;
+}
+
 function processGrid(element) {
     const path = `steps/${element.id}`
-    console.log(element)
-
+    const answers = element.elements[0].elements;
+    const statements = element.elements[1].elements;
     const valueArray = [];
-  for (let i = 0; i <= statments.length - 1; i += 1) {
-    const currentStatement = {
-      id: statments[i].id,
-      value: [
-        {
-          id: answers[i].id,
-          value: {
-            selected: true,
-          },
-        },
-      ],
-    };
-    valueArray.push(currentStatement);
-  }
-  return valueArray;
+
+    for (let i = 0; i < statements.length; i += 1) {
+        const selectionArray = createRandomSingleSelection(answers);
+        const currentStatement = {
+            id: statements[i].id,
+            value: selectionArray
+        };
+        valueArray.push(currentStatement);
+    }
+
+    const datapoint = {
+        path: path,
+        value: valueArray
+    }
+    return datapoint;
 }
 
 function processNPS(element) {
@@ -389,6 +378,41 @@ function processPhone(element) {
         value: phoneBuilder
     }
     return datapoint;
+}
+
+function createRandomSingleSelection(answers) {
+    const randomSelection = getRandomArbitrary(0, answers.length)
+    const valueArray = [];
+    if (answers.length === 1) {
+        currentAnswer = [{
+            id: answers[0].id,
+            value: {
+                selected: true
+            }
+        }]
+        return currentAnswer;
+    }
+
+    for (let i = 0; i < answers.length; i++) {
+        let currentAnswer;
+        if (randomSelection === i) {
+            currentAnswer = {
+                id: answers[i].id,
+                value: {
+                    selected: true
+                }
+            }
+        } else {
+            currentAnswer = {
+                id: answers[i].id,
+                value: {
+                    selected: false
+                }
+            }
+        }
+        valueArray.push(currentAnswer)
+    }
+    return valueArray;
 }
 
 function getRandomArbitrary(min, max) {

@@ -1,8 +1,14 @@
 
 const config = require('./config.dev.json');
 const axios = require('axios');
-const respondingUrl = config.respondingUrl;
 
+const respondingUrl = config.respondingUrl;
+const applicationId = config.applicationId;
+const locale = config.locale;
+const dataSetType = config.dataSetType;
+const communicationId = config.communicationId;
+const activityId = config.activityId;
+const memberId = config.memberId;
 
 async function getToken() {
     const request = {
@@ -19,10 +25,16 @@ async function getToken() {
     }
 }
 
-async function postRespondingContext(surveyId, applicationId) {
+async function postRespondingContext(surveyId) {
     const contextUrl = `${respondingUrl}/api/v1/applications/${applicationId}/surveys/${surveyId}/respondingcontext`;
     const token = await getToken();
-    const contextData = returnContextData('en-CA', 'www.client.com', 0);
+    let contextData;
+
+    if (memberId !== "") {
+        contextData = returnContextDataMember(locale, 'www.client.com', dataSetType);
+    } else {
+        contextData = returnContextData(locale, 'www.client.com', dataSetType);
+    }
 
     const request = {
         method: 'post',
@@ -39,7 +51,7 @@ async function postRespondingContext(surveyId, applicationId) {
     }
 };
 
-async function postStart(surveyId, applicationId) {
+async function postStart(surveyId) {
     const startUrl = `${respondingUrl}/api/v1/start`;
     const contextId = await postRespondingContext(surveyId, applicationId)
     const startData = returnStartData(contextId, 'www.client.com', 'Desktop');
@@ -81,12 +93,51 @@ async function postNavigation(responseBody, jwt, dp) {
     }
 }
 
-function returnContextData(locale, domainName, dataSetType) {
+function returnContextDataMember(locale, domainName, dataSetType) {
     const jsonData = {
-        batchId: Math.floor(Math.random() * 1000000000000 + 1).toString(),
+        batchId: Math.floor(Math.random() * 10000000000 + 1).toString(),
+        respondentUrn: `urn:alida-sparq-member:${memberId}`,
         locale,
         domainName,
         dataSetType,
+        parameters: [
+            {
+                name: 'activityId',
+                value: activityId,
+            },
+            {
+                name: 'communicationId',
+                value: communicationId,
+            },
+            {
+                name: 'participantType',
+                value: 'Member',
+            },
+        ],
+    };
+    return jsonData;
+}
+
+function returnContextData(locale, domainName, dataSetType) {
+    const jsonData = {
+        batchId: Math.floor(Math.random() * 10000000000 + 1).toString(),
+        locale,
+        domainName,
+        dataSetType,
+        parameters: [
+            {
+                name: 'activityId',
+                value: activityId,
+            },
+            {
+                name: 'communicationId',
+                value: communicationId,
+            },
+            {
+                name: 'participantType',
+                value: 'Anonymous',
+            },
+        ],
     };
     return jsonData;
 }
