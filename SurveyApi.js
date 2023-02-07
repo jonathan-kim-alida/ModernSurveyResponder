@@ -30,6 +30,10 @@ async function postRespondingContext(surveyId) {
     const token = await getToken();
     let contextData;
 
+    if(dataSetType !== 0 || dataSetType !== 1 || dataSetType == 2){
+        dataSetType = 0
+    }
+
     if (memberId !== "") {
         contextData = returnContextDataMember(locale, 'www.client.com', dataSetType);
     } else {
